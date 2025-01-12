@@ -17,17 +17,24 @@ const Navbar = () => {
         <Button color="inherit" onClick={() => navigate('/')}>
           Home
         </Button>
+        {isLoggedIn ? (
+          <>
         <Button color='inherit' onClick={() => navigate('/dashboard')}>
           Dashboard
           </Button>
-        {isLoggedIn ? (
           <Button color="inherit" onClick={handleLogout}>
             Logout
           </Button>
+          </>
         ) : (
+          <>
+          <Button color='inherit' onClick={() => navigate('/signup')}>
+          Signup
+          </Button>
           <Button color="inherit" onClick={() => navigate('/login')}>
             Login
           </Button>
+          </>
         )}
       </Toolbar>
     </AppBar>

@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const bcrypt = require('bcrypt'); 
 const jwt = require('jsonwebtoken');
+require('dotenv').config();
+
 
 const app = express();
 app.use(bodyParser.json());
@@ -62,7 +64,7 @@ app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // Ellenőrizd, hogy létezik-e a felhasználó az adatbázisban
+    // Ellenőriz
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(400).json({ message: 'Invalid email or password' });
@@ -74,11 +76,10 @@ app.post('/api/login', async (req, res) => {
       return res.status(400).json({ message: 'Invalid email or password' });
     }
 
-    // Generálj egy token-t a felhasználó számára
     const token = jwt.sign(
-      { id: user._id, email: user.email },
-      'dc03f14be7603647b14279848eeb7d6405e5c4a04ac5e261a1efd7eb44face7fe8f2281ba6440d2edc972f49b508a49520190bd6b15420ad073e06387104835ae16cf337e2eed5d96bcc5e8cb9f483124d3a9cfefcd19dee353754e82c2eb2b3c95252ec84f80edfca23645ad2c4c620b477272eaa756643018ccd90404e7f4a', // A tokenhez tartozó titkos kulcs
-      { expiresIn: '1h' } // Token érvényessége: 1 óra
+      { id: user._id, email: user.email }, 
+      process.env.JWT_SECRET, 
+      { expiresIn: '1h' } 
     );
 
     res.status(200).json({ token, message: 'Login successful' });
@@ -94,7 +95,7 @@ app.get('/api/profile', async (req, res) => {
   }
 
   try {
-    const decoded = jwt.verify(token, 'your_jwt_secret');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id).select('-password');
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
