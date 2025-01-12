@@ -4,21 +4,31 @@ import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const isLoggedIn = !!localStorage.getItem('token'); // Ellenőrizd, van-e token
 
-  const handleNavigation = (path) => {
-    navigate(path);
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login'); // Navigáció a login oldalra
   };
 
   return (
-    <AppBar position="static" >
+    <AppBar position="static">
       <Toolbar>
-        <Button color="inherit" onClick={() => handleNavigation('/')}>
+        <Button color="inherit" onClick={() => navigate('/')}>
           Home
         </Button>
-        <Button color="inherit" onClick={() => handleNavigation('/addcourse')}>
-          Add Courses
-        </Button>
-        
+        <Button color='inherit' onClick={() => navigate('/dashboard')}>
+          Dashboard
+          </Button>
+        {isLoggedIn ? (
+          <Button color="inherit" onClick={handleLogout}>
+            Logout
+          </Button>
+        ) : (
+          <Button color="inherit" onClick={() => navigate('/login')}>
+            Login
+          </Button>
+        )}
       </Toolbar>
     </AppBar>
   );
