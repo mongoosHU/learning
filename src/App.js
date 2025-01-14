@@ -8,8 +8,13 @@ import Signup from './components/Signup';
 import ProtectedRoute from './Hook/ProtectedRoute';
 import Dashboard from './components/Dashboard';
 
-function App() {
+
+
+const App = () => {
+  
+  
   return (
+    
     <Router>
       <Navbar />
       <Routes>
@@ -21,6 +26,6 @@ function App() {
       </Routes>
     </Router>
   );
-}
+};
 
 export default App;
